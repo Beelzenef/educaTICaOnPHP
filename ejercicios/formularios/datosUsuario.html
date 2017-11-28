@@ -10,10 +10,53 @@
 
         <form action="datosUsuario.php" method="post">
 
+            <fieldset>
+                <legend>¿QUIEN ERES?</legend>
             <p>Nombre: <input type="text" name="nombre" required="required"/></p>
-            <p>Apellidos: <input type="text" name="nombre" required="required"/></p>
-            <input type="submit" value="¡Suscríbete!"/>
+            <p>Apellidos: <input type="text" name="apellidos" required="required"/></p>
+            <p>Email: <input type="email" name="email" required="required"/></p>  
+            <p>Fecha de nacimiento: </p>
+            <p><input type="date" required="required" min="1900-01-01"/></p>
+            </fieldset>
 
+            <fieldset>
+                <legend>¿DE DONDE ERES?</legend>
+                    <p>Ciudad: <input type="text" name="ciudad" required="required"/></p>
+                    <p>Código postal: <input type="number" name="cp" required="required"/></p>
+                    <p>País: 
+                        <select name="pais">
+                              <option value="esp">España</option>
+                              <option value="ecu">Ecuador</option>
+                              <option value="col">Colombia</option>
+                              <option value="arg">Argentina</option>
+                        </select>
+                    </p>
+
+            </fieldset>
+            <fieldset>
+                <legend>¿COMO QUIERES INICIAR SESION?</legend>
+                    <p>Nombre de usuario: <input type="text" name="username" required="required"/></p>
+                    <p>Contraseña: <input type="password" name="passwd" required="required"/></p>
+                    <p>Repita la contraseña: <input type="password" name="passwd_repeat" required="required"/></p>
+
+            </fieldset>
+            <fieldset>
+                <legend>INFORMACION DE REGISTRO</legend>
+                    <p> Recibir novedades de rolForevah, para estar siempre conectado a novedades rolerísticas:</p>
+                    <p> <input type="checkbox" name="acepta"/>
+                     Acepto el acuerdo de servicios, la declaración de privacidad y el uso de cookies. </p>
+
+                    <p>
+                        <input type="checkbox" name="frec" value="dia" /> 1 vez al día
+                        <input type="checkbox" name="frec" value="sem"/> 1 vez a la semana
+                        <input type="checkbox" name="frec" value="mes" /> 1 vez al mes 
+                    </p>
+                
+            </fieldset>
+
+                </br></br>
+
+            <input type="submit" value="¡Suscríbete!"/>
         </form>
 
     </body>
