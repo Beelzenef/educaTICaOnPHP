@@ -1,24 +1,29 @@
 <?php
 
-include "../plantillas/print_html.php";
+include "print_html.php";
+
+// Elena Guzmán Blanco - SGEMP
 
 // Rescatando datos:
 $nombre = $_POST["nombre"];
 $apellidos = $_POST["apellidos"];
 $username = $_POST["username"];
 $passwd = $_POST["passwd"];
-$pass_rpt = $_POST["passwd_repeat"];
+$passwd_repeat = $_POST["passwd_repeat"];
 $email = $_POST["email"];
-$fecha = $_POST["fecha"];
 $ciudad = $_POST["ciudad"];
 $pais = $_POST["pais"];
 $acepta = isset($_POST["acepta"]);
-$frec = $_POST["frec"];
+$frec = isset($_POST["frec"]);
+
+if ($frec)
+    $frecuenciaElegida = $_POST["frec"];
+
 
 // Mostrando HTML:
-howHTMLHeader("Recogiendo datos de usuario");
+showHTMLHeader("Recogiendo datos de usuario");
 
-	print "El usuario " .$nombre. " y " .$apellidos. ", nacido en " .$fecha. ", con usuario " .$username. " y email " .$email. " ";
+	print "El usuario " .$nombre. " " .$apellidos. ", con usuario " .$username. " y email " .$email. " ";
 
 	if ($acepta)
 		print "acepta ";
@@ -32,11 +37,12 @@ howHTMLHeader("Recogiendo datos de usuario");
 	print "<p> Su contraseña y repetición de contraseña ";
 
 	if ($passwd == $passwd_repeat)
-		print "<p>coinciden</p>";
+		print "coinciden</p>";
 	else
-		print "<p>no coinciden</p>";
+		print "no coinciden</p>";
 
-	print "<p> Ha decidido recibir novedades cada " .$frec. "</p>";
+    if ($frec)
+	    print "<p> Ha decidido recibir novedades cada " .$frecuenciaElegida. "</p>";
 
 showHTMLFooter();
 
