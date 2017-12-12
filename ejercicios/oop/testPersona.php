@@ -1,6 +1,6 @@
 <?php
 
-include_once "../plantillas/print_html.php";
+include_once "../print_html.php";
 include_once "persona.php";
 include_once "estudiante.php";
 
