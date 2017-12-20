@@ -1,9 +1,9 @@
 <?php
+    include_once "login_app.php";
 
-include_once "print_html.php";
-include_once "login_dao.php";
+    session_start();
 
-    showHTMLHeader("Login con PHP");
+    App::showHTMLHeader("Login con PHP");
 ?>
     <div class="container">
         <div class="row">
@@ -43,14 +43,15 @@ include_once "login_dao.php";
             // Conexión a base de datos
             // ¿Existe el usuario?
 
-            $dao = new DAO();
+            $app = new App();
 
-            if (!$dao->isConnected()) {
-                echo "<p>" .$dao->err. "</p>";
+            if (!$app->getDAO()->isConnected()) {
+                echo "<p>" .$app->getDAO()->err. "</p>";
             }
-            else if ($dao->validateUser($user, $password)) {
+            else if ($app->getDAO()->validateUser($user, $password)) {
                 // Guardando sesión de usuario
                 // Redireccionando a otra pag
+                $app->iniciarSesion($user);
                 echo "<script language=\"javascript\">window.location.href=\"login_inventory.php\"</script>";
             }
             else {
@@ -59,6 +60,6 @@ include_once "login_dao.php";
             
         }
     }
-    showHTMLFooter();
+    App::showHTMLFooter();
     
 ?>

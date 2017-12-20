@@ -61,6 +61,17 @@ define ("USERPASSW_COLUMN", "password");
             }
         }
 
+        function listarProds()
+        {
+            $consulta = 'select nombre, precio from producto where precio > :precio';
+
+            $sentencia = $this->conn->prepare($consulta, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            $sentencia->execute(array(':precio' => 10));
+            $productos = $sentencia->fetchAll();
+
+            return $productos;
+        }
+
 
     }
 

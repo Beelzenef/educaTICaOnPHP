@@ -1,13 +1,12 @@
 <?php
 
-include_once "print_html.php";
-include_once "login_dao.php";
+    include_once "login_app.php";
 
-    showHTMLHeader("Login con PHP");
-?>
-    <p> ¡Bienvenido, usuario! </p>
+    App::showHTMLHeader("Lista de productos en BD");
+    $app = new App();
+    $app->validateSession();
+    $app->listarProductos();
 
-<?php
-    showHTMLFooter();
+    App::showHTMLFooter();
     
 ?>
