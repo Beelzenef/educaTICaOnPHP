@@ -9,6 +9,12 @@ define ("USER_TABLE", "user");
 define ("USERNAME_COLUMN", "name");
 define ("USERPASSW_COLUMN", "password");
 
+define ("TABLE_DEPENDENCY", "dependencia");
+define ("COLUMN_DEPENDENCY_ID", "id");
+define ("COLUMN_DEPENDENCY_NAME", "name");
+define ("COLUMN_DEPENDENCY_SHORTNAME", "shortname");
+
+
     class DAO {
 
         // Variables
@@ -63,16 +69,39 @@ define ("USERPASSW_COLUMN", "password");
 
         function listarProds()
         {
-            $consulta = 'select nombre, precio from producto where precio > :precio';
+            try {
+                $consulta = 'select nombre, precio from producto where precio > :precio';
 
-            $sentencia = $this->conn->prepare($consulta, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-            $sentencia->execute(array(':precio' => 10));
-            $productos = $sentencia->fetchAll();
+                $sentencia = $this->conn->prepare($consulta, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                $sentencia->execute(array(':precio' => 10));
+                $productos = $sentencia->fetchAll();
 
-            return $productos;
+                return $productos;
+            } catch (PDOException $e)
+            {
+                $this->error = "Error al hacer consulta en tabla";
+            }
         }
 
+        function getDependencies()
+        {
+                $sql = "SELECT * FROM " .TABLE_DEPENDENCY;
 
+                if ($resultado = $this->conn->query($sql)) 
+                {
+                    if ($resultado->fetchColumn() > 0) {
+                        return $resultado;
+                    }
+                    else
+                    {
+                        echo "<h3 class=\"text-center\">Sin datos que mostrar</h3>";
+                    }
+                }
+                else
+                {
+                    echo "<h3 class=\"text-center\">Error en la consulta</h3>";
+                }
+        }
     }
 
 ?>

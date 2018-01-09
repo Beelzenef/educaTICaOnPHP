@@ -64,7 +64,35 @@
                 echo "<p>Precio: " .$item[1]. "</p><br/>";
             }
 
-            
+        }
+
+        function getDependencies ()
+        {
+                try {
+
+                    $dependencias = $this->dao->getDependencies();
+
+                    if (count($dependencias) > 0) {
+                        echo "
+                        <h1 class=\"text-center\"> Listado de dependencias </h1>
+                        <table class=\"table table-bordered table-striped\">";
+
+                        echo "<thead class=\"thead-default\"> <tr> <th> ID </th> <th> Nombre </th> <th> Codigo </th> <th> Localizacion </th> </tr> </thead>";
+
+                        foreach ($dependencias as $item) {
+                            echo "<tr> <td> " .$item['id']. "</td>";
+                            echo "<td> " .$item['name']. "</td>";
+                            echo "<td> " .$item['shortname']. "</td>";
+                            echo "<td> <a href=\"sector.php?idDependency=" .$item['id']. "\"> <img src=\"http://www.cornerstonebuildersswfl.com/wp-content/themes/glacial/images/location_icon_1.png\"/> </a> </tr>";
+                        }
+
+                        echo "</table>";
+                    }
+                }
+                catch (Exception $e)
+                {
+                    echo "<p>Error en la consulta</p>";
+                }
         }
     
         static function showHTMLHeader ($titulo) {
