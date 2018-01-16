@@ -14,6 +14,11 @@ define ("COLUMN_DEPENDENCY_ID", "id");
 define ("COLUMN_DEPENDENCY_NAME", "name");
 define ("COLUMN_DEPENDENCY_SHORTNAME", "shortname");
 
+define ("TABLE_SECTOR", "producto");
+define ("COLUMN_SECTOR_ID", "id");
+define ("COLUMN_SECTOR_NAME", "nombre");
+define ("COLUMN_SECTOR_SHORTNAME", "precio");
+define ("COLUMN_SECTOR_DEPENDENCY", "idDependencia");
 
     class DAO {
 
@@ -101,6 +106,23 @@ define ("COLUMN_DEPENDENCY_SHORTNAME", "shortname");
                 {
                     echo "<h3 class=\"text-center\">Error en la consulta</h3>";
                 }
+        }
+
+        function getSectorsByDependency($idDep) {
+            $sql = "SELECT * FROM " .TABLE_SECTOR. 
+                " WHERE " .COLUMN_SECTOR_DEPENDENCY. " = :idDep";
+
+            // Otras fórmulas:
+            //$sql = "SELECT * FROM " .TABLE_SECTOR. " WHERE " .COLUMN_SECTOR_DEPENDENCY. " = ? ";
+            //return $statement->execute(array($idDep));
+
+            $statement = $this->conn->prepare($sql);
+
+            $statement->bindParam(':idDep', $idDep);
+            // Más fórmulas
+            //return $statement->execute(array('idDep' => $idDep));
+            $statement->execute();
+            return $statement;
         }
     }
 

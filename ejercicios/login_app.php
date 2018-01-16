@@ -58,11 +58,18 @@
         {
             $datos = $this->dao->listarProds();
 
+            print" <h1 class=\"text-center\"> Listado de productos </h1>
+            <table class=\"table table-bordered table-striped\">";
+
+            echo "<thead class=\"thead-default\"> <tr> <th> Nombre </th> <th> Precio </th> </tr> </thead>";
+
             foreach ($datos as $item)
             {
-                echo "<p>Nombre de producto: " .$item[0]. "</p>";
-                echo "<p>Precio: " .$item[1]. "</p><br/>";
+                echo "<tr> <td> " .$item[0]. " </td>";
+                echo "<td> " .$item[1]. " </td></tr>";
             }
+
+            echo "</table>";
 
         }
 
@@ -83,10 +90,10 @@
                             echo "<tr> <td> " .$item['id']. "</td>";
                             echo "<td> " .$item['name']. "</td>";
                             echo "<td> " .$item['shortname']. "</td>";
-                            echo "<td> <a href=\"sector.php?idDependency=" .$item['id']. "\"> <img src=\"http://www.cornerstonebuildersswfl.com/wp-content/themes/glacial/images/location_icon_1.png\"/> </a> </tr>";
+                            echo "<td> <a href=\"login_sector.php?idDependency=" .$item['id']. "\"> <img src=\"http://www.cornerstonebuildersswfl.com/wp-content/themes/glacial/images/location_icon_1.png\"/> </a> </tr>";
                         }
 
-                        echo "</table>";
+                        echo "</table>";                        
                     }
                 }
                 catch (Exception $e)
@@ -112,6 +119,29 @@
                 <script src=\"http://code.jquery.com/jquery.js\"></script>
                 <script src=\"js/bootstrap.min.js\"></script>
                 ";
+        }
+
+        static function showMenu() {
+            print "
+            <nav class=\"navbar navbar-toggleable-md navbar-light bg-faded\">
+            <a class=\"navbar-brand\">3d10Mundos</a>
+          
+            <div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">
+            <ul class=\"navbar-nav mr-auto\">
+                <li class=\"nav-item\">
+                    <a class=\"nav-link\" href=\"login_inventory.php\"/>Dependencias</a>
+                </li>
+                <li class=\"nav-item active\">
+                    <a class=\"nav-link\" href=\"login_productos.php\"/>Productos</a>
+                </li>
+                <li class=\"nav-item active\">
+                    <a class=\"nav-link\" href=\"login_logout.php\"/>Cerrar sesión</a>
+                </li>
+              </ul>
+            </div>
+            </nav>
+            
+            </br></br>";
         }
         
         static function showHTMLFooter() {

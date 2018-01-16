@@ -9,7 +9,7 @@
         <div class="row">
         
             <div class="col-6 col-md-4 offset-md-4 offset-3">
-                <h1 class="text-center">Inicar sesión</h1>
+                <h1 class="text-center">Iniciar sesión</h1>
                 <form method="POST" action="<?=$_SERVER['PHP_SELF'] ?>">
                     
                     <div class="form-group">
