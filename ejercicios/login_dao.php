@@ -124,6 +124,27 @@ define ("COLUMN_SECTOR_DEPENDENCY", "idDependencia");
             $statement->execute();
             return $statement;
         }
+
+        function addNewDependency($name, $shortname) {
+            $sql = "INSERT INTO " .TABLE_DEPENDENCY. " (id, name, shortname) VALUES (NULL, :nameDep, :shortnameDep)";
+
+            $statement = $this->conn->prepare($sql);
+            $statement->bindParam(':nameDep', $name);
+            $statement->bindParam(':shortnameDep', $shortname);
+
+            $statement->execute();
+        }
+
+        function deleteDependency($id) {
+
+            $sql = "DELETE FROM " .TABLE_DEPENDENCY. " WHERE id = :id";
+            
+            $statement = $this->conn->prepare($sql);
+            $statement->bindParam(':id', $id);
+
+            $statement->execute();
+            return $statement;
+        }
     }
 
 ?>
