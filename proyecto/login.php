@@ -1,5 +1,5 @@
 <?php
-    include_once "login_app.php";
+    include_once "app.php";
     session_start();
     App::showHTMLHeader("Login - EDUCA-TIC-A");
 ?>
@@ -23,7 +23,7 @@
                     </div>
                 </form>
                 <div class="text-center">
-                    <a class="nav-link" href="login_inventory.php"/>
+                    <a class="nav-link" href="aulas.php"/>
                         <button class="btn btn-primary" type="submit">Registrarme</button>
                     </a>
                 </div>
@@ -51,7 +51,7 @@
                 // Guardando sesión de usuario
                 // Redireccionando a otra pag
                 $app->iniciarSesion($user);
-                echo "<script language=\"javascript\">window.location.href=\"login_aulas.php\"</script>";
+                echo "<script language=\"javascript\">window.location.href=\"aulas.php\"</script>";
             }
             else {
                 echo "<p>Usuario incorrecto</p>";

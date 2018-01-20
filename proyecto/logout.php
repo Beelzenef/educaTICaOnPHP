@@ -1,6 +1,6 @@
 <?php
 
-    include_once "login_app.php";
+    include_once "app.php";
     session_start();
     $app = new App();
     $app->destroySession();
