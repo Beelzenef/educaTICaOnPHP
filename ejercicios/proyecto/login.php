@@ -23,9 +23,9 @@
                     </div>
                 </form>
                 <div class="text-center">
-                    <a class="nav-link" href="aulas.php"/>
-                        <button class="btn btn-primary" type="submit">Registrarme</button>
-                    </a>
+                <a class="nav-link" href="registro.php"/>
+                        <button class="btn btn-primary" type="">Registrarme</button>
+                </a>
                 </div>
             </div>
         </div>

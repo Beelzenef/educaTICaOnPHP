@@ -20,12 +20,12 @@ define ("COLUMN_AULA_TIC", "tic");
 define ("COLUMN_AULA_PCS", "pcs");
 // Tabla RESERVA
 define ("TABLE_RESERVA", "reserva");
-define ("COLUMN_RESERVA_ID", "idReserva")
+define ("COLUMN_RESERVA_ID", "idReserva");
 define ("COLUMN_RESERVA_AULARESERVADA", "idAulaReservada");
 define ("COLUMN_RESERVA_HORA", "hora");
 define ("COLUMN_RESERVA_HORASRESERVADAS", "horasreservadas");
-define ("COLUMN_RESERVA_DIA", "dia")
-define ("COLUMN_RESERVA_DIASRESERVADOS", "diasreservados")
+define ("COLUMN_RESERVA_DIA", "dia");
+define ("COLUMN_RESERVA_DIASRESERVADOS", "diasreservados");
 define ("COLUMN_RESERVA_MOTIVO", "motivo");
 
     class DAO {
@@ -67,10 +67,10 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
         function validateUser($u, $p)
         {
             try {
-                // Solución fácil, A EVITAR
-                $sql = "SELECT name, password FROM " .USER_TABLE. " WHERE " .USERNAME_COLUMN. "='" .$u. "' AND " .USERPASSW_COLUMN. "=PASSWORD('" .$p. "');";
-                $statement = $this->conn->query($sql);
-                return ($statement->rowCount() == 1);
+                $sql = "SELECT name, password FROM " .USER_TABLE. " WHERE " .COLUMN_USER_USERNAME. "='" .$u. "' AND " .USERPASSW_COLUMN. "=PASSWORD('" .$p. "');";
+                $statement = $this->conn->prepare($sql);
+                $usuario = $statement->fetchAll();
+                return count($usuario) == 1;
             } catch (PDOException $e) {
                 $this->err = "Error con usuario: " .$e->getMessage();
             }
