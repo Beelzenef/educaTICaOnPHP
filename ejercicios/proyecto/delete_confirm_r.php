@@ -1,0 +1,17 @@
+<?php
+
+    include_once "app.php";
+
+    $app = new App();
+    $app->validateSession();
+
+    $idReserva = $_GET['id'];
+    
+        if (!isset($idReserva)) {
+            echo '<p>Sin reserva elegida</p>';
+        }
+        else {
+            $app->deleteReserva($idReserva);
+        }
+    
+?>

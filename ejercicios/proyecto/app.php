@@ -196,7 +196,40 @@
         // * Eliminar reserva
 
         function getReservas() {
-            
+            try {
+
+                $aulas = $this->dao->getReservas();
+
+                if (count($aulas) > 0) {
+                    echo "
+                    <h1 class=\"text-center\"> Listado de reservas </h1>
+                    <table class=\"table table-bordered table-striped\">";
+
+                    echo "<thead class=\"thead-default\"> <tr> <th> ID </th> <th> ID </th> <th> Aula </th> <th> Reservado en: </th>
+                    <th> Cantidad </th> <th> Motivo </th> <th> Eliminar aula </th></tr> </thead>";
+
+                    foreach ($aulas as $item) {
+                        echo "<tr> <td> " .$item['idReserva']. "</td>";
+                        echo "<td> " .$item['idAulaReservada']. "</td>";
+
+                        if (!is_null($item['hora']) {
+                            echo "<td> " .$item['hora']. "</td>";
+                            echo "<td> " .$item['horasReservadas']. "</td>";
+                        }
+                        if (!is_null($item['hora']) {
+                            echo "<td> " .$item['dia']. "</td>";
+                            echo "<td> " .$item['diasReservados']. "</td>";
+                        }
+                        echo "<td> " .$item['motivo']. "</td>";
+                        echo "<td> <a href=\"delete_reserva.php?idReserva=" .$item['idReserva']. "\"> <img src=\"https://static.independent.co.uk/static-assets/close-video-preroll.svg\"/> </a> </tr>";                            
+                    }
+                    echo "</table>";
+                }
+            }
+            catch (Exception $e)
+            {
+                echo "<p>Error en la consulta</p>";
+            }
         }
 
         function altaReservaPorHoras($hora, $horasReservadas, $idAulaReservada, $motivo) {
@@ -216,6 +249,17 @@
             catch (Exception $e)
             {
                 echo "<p>Error en la consulta</p>";
+            }
+        }
+
+        function deleteReserva($idReserva) {
+            try {
+                $aulas = $this->dao->deleteReserva($id);
+                echo "<p>¡Reserva eliminada!</p>";
+            }
+            catch (Exception $e)
+            {
+                echo "<p>No ha sido posible eliminar...</p>";
             }
         }
 
