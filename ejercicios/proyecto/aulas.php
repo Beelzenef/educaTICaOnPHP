@@ -10,5 +10,4 @@
     $app->getAulas();
 
     App::showHTMLFooter();
-    
 ?>

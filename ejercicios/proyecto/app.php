@@ -110,7 +110,7 @@
               <div class=\"modal-header\">
                 <h5 class=\"modal-title\">Añadiendo aulas</h5>
               </div>
-            <form action=\"###\" method=\"post\">
+            <form method=\"POST\" action=\"<?=\$_SERVER['PHP_SELF']\">
             <div class=\"form-group\">
               <label for=\"nombre\">Nombre</label>
               <input type=\"text\" name=\"nombre\" required=\"required\" class=\"form-control\" id=\"nombre\" aria-describedby=\"nombre\" placeholder=\"Introduce nombre de aula\">
@@ -173,6 +173,19 @@
             }
         }
 
+        // CONSULTAS PARA USUARIOS
+
+        function altaUsuario ($user, $nombre, $passw, $email, $fechanac) {
+            try {
+                $aulas = $this->dao->altaUsuario ($user, $nombre, $passw, $email, $fechanac);
+                echo "<p>¡Registro realizado!</p>";
+            }
+            catch (Exception $e)
+            {
+                echo "<p>Error en la consulta</p>";
+            }
+        }
+
         // CONSULTAS PARA RESERVAS
 
         // Funciones que faltan:
@@ -186,6 +199,26 @@
             
         }
 
+        function altaReservaPorHoras($hora, $horasReservadas, $idAulaReservada, $motivo) {
+            try {
+                $aulas = $this->dao->altaReservaPorHoras($hora, $horasReservadas, $idAulaReservada, $motivo);
+            }
+            catch (Exception $e)
+            {
+                echo "<p>Error en la consulta</p>";
+            }
+        }
+
+        function altaReservaPorDia($dia, $diasReservados, $idAulaReservada, $motivo) {
+            try {
+                $aulas = $this->dao->altaReservaPorDia($dia, $diasReservados, $idAulaReservada, $motivo);
+            }
+            catch (Exception $e)
+            {
+                echo "<p>Error en la consulta</p>";
+            }
+        }
+
         // CONSULTAS PARA USUARIOS
 
         static function showRegisterForm() {
@@ -195,18 +228,18 @@
                       <div class=\"modal-header\">
                         <h5 class=\"modal-title\">Registro</h5>
                       </div>
-                    <form action=\"add_user.php\" method=\"post\">
+                    <form method=\"POST\" action=\"<?=\$_SERVER['PHP_SELF']\">
                     <div class=\"form-group\">
-                      <label for=\"username\">Nombre de usuario</label>
-                      <input type=\"text\" name=\"username\" required=\"required\" class=\"form-control\" id=\"username\" aria-describedby=\"username\" placeholder=\"Usuario\">
-                      <label for=\"password\">Contraseña</label>
-                      <input type=\"text\" name=\"password\" required=\"required\" class=\"form-control\" id=\"password\" aria-describedby=\"password\" placeholder=\"Contraseña\">
-                      <label for=\"password\">Nombre y apellidos</label>
-                      <input type=\"text\" name=\"password\" required=\"required\" class=\"form-control\" id=\"nombre\" aria-describedby=\"nombre\" placeholder=\"Nombre y apellidos\">
-                      <label for=\"fechanacimiento\">Fecha de nacimiento</label>
-                      <input type=\"text\" name=\"fechanacimiento\" required=\"required\" class=\"form-control\" id=\"fechanacimiento\" aria-describedby=\"fechanacimiento\" placeholder=\"Fecha de nacimiento\">
+                      <label for=\"user\">Nombre de usuario</label>
+                      <input type=\"text\" name=\"user\" required=\"required\" class=\"form-control\" id=\"user\" aria-describedby=\"user\" placeholder=\"Usuario\">
+                      <label for=\"passw\">Contraseña</label>
+                      <input type=\"password\" name=\"passw\" required=\"required\" class=\"form-control\" id=\"passw\" aria-describedby=\"passw\" placeholder=\"Contraseña\">
+                      <label for=\"nombre\">Nombre y apellidos</label>
+                      <input type=\"text\" name=\"nombre\" required=\"required\" class=\"form-control\" id=\"nombre\" aria-describedby=\"nombre\" placeholder=\"Nombre y apellidos\">
+                      <label for=\"fechanac\">Fecha de nacimiento</label>
+                      <input type=\"date\" name=\"fechanac\" required=\"required\" class=\"form-control\" id=\"fechanac\" aria-describedby=\"fechanac\" placeholder=\"Fecha de nacimiento\">
                       <label for=\"email\">Email</label>
-                      <input type=\"text\" name=\"email\" required=\"required\" class=\"form-control\" id=\"email\" aria-describedby=\"email\" placeholder=\"Email\">
+                      <input type=\"email\" name=\"email\" required=\"required\" class=\"form-control\" id=\"email\" aria-describedby=\"email\" placeholder=\"Email\">
                     </div>
                     <button type=\"submit\" class=\"btn btn-primary\">Confirmar registro</button>
                   </form></div></div>";

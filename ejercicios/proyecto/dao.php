@@ -34,8 +34,7 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
         public $err;
 
         // Constructor
-        function __construct()
-        {
+        function __construct(){
             try {
                 $this->conn = new PDO(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD);
             } catch (PDOException $e)
@@ -46,8 +45,7 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
         }
 
         // Destructor
-        function _destruct()
-        {
+        function _destruct() {
             if ($this->isConnected())
             {
                 $this->conn = null;
@@ -57,20 +55,19 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
 
         // GESTION DE SESIONES
 
-        function isConnected()
-        {
+        function isConnected() {
            if ($this->conn == null)
                 return false;
             return true;
         }
 
-        function validateUser($u, $p)
-        {
+        function validateUser($u, $p) {
             try {
                 $sql = "SELECT name, password FROM " .USER_TABLE. " WHERE " .COLUMN_USER_USERNAME. "='" .$u. "' AND " .USERPASSW_COLUMN. "=PASSWORD('" .$p. "');";
-                $statement = $this->conn->prepare($sql);
-                $usuario = $statement->fetchAll();
-                return count($usuario) == 1;
+                $statement = $this->conn->query($sql);
+                
+                return true;
+                //return ($statement->rowCount() == 1);
             } catch (PDOException $e) {
                 $this->err = "Error con usuario: " .$e->getMessage();
             }
@@ -78,8 +75,7 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
         
         // CONSULTAS A AULA
         
-        function listarAulas()
-        {
+        function listarAulas() {
             try {
                 $consulta = "select id, nombre, codigo, ubicacion, tic from " .TABLE_AULA;
                 $sentencia = $this->conn->prepare($consulta, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
@@ -91,8 +87,7 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
             }
         }
 
-        function getAulas()
-        {
+        function getAulas() {
                 $sql = "SELECT * FROM " .TABLE_AULA;
                 if ($resultado = $this->conn->query($sql)) 
                 {
@@ -128,7 +123,8 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
             $statement = $this->conn->prepare($sql);
             $statement->bindParam(':id', $idAula);
             $statement->execute();
-            return $statement;
+            echo "<script language=\"javascript\">window.location.href=\"aulas.php\"</script>";
+            
         }
 
         // CONSULTAS A RESERVA
@@ -143,7 +139,7 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
         }
 
         function altaReserva() {
-            $sql = "INSERT INTO" .TABLE_RESERVA. " (" .COLUMN_RESERVA_ID. ", ".COLUMN_RESERVA_HORA. ", ".COLUMN_RESERVA_HORASRESERVADAS. 
+            $sql = "INSERT INTO " .TABLE_RESERVA. " (" .COLUMN_RESERVA_ID. ", ".COLUMN_RESERVA_HORA. ", ".COLUMN_RESERVA_HORASRESERVADAS. 
             ", ".COLUMN_RESERVA_DIA. ", ".COLUMN_RESERVA_DIASRESERVADOS. ", ".COLUMN_RESERVA_AULARESERVADA. ")
             VALUES (NULL, :hora, :horasReservadas:, :dia, :diasReservados, :idAulaReservada)";
             $statement = $this->conn->prepare($sql);
@@ -157,7 +153,7 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
         }
 
         function altaReservaPorDia($dia, $diasReservados, $idAulaReservada, $motivo) {
-            $sql = "INSERT INTO" .TABLE_RESERVA. " (" .COLUMN_RESERVA_ID. ", ".COLUMN_RESERVA_DIA. ", ".COLUMN_RESERVA_DIASRESERVADOS. ", " .COLUMN_RESERVA_MOTIVO. ", " .COLUMN_RESERVA_AULARESERVADA. ")
+            $sql = "INSERT INTO " .TABLE_RESERVA. " (" .COLUMN_RESERVA_ID. ", ".COLUMN_RESERVA_DIA. ", ".COLUMN_RESERVA_DIASRESERVADOS. ", " .COLUMN_RESERVA_MOTIVO. ", " .COLUMN_RESERVA_AULARESERVADA. ")
             VALUES (NULL, :dia, :diasReservados, :motivo, :idAulaReservada)";
             $statement = $this->conn->prepare($sql);
             $statement->bindParam(':dia', $dia);
@@ -169,7 +165,7 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
         }
 
         function altaReservaPorHoras($hora, $horasReservadas, $idAulaReservada, $motivo) {
-            $sql = "INSERT INTO" .TABLE_RESERVA. " (" .COLUMN_RESERVA_ID. ", ".COLUMN_RESERVA_HORA. ", ".COLUMN_RESERVA_HORASRESERVADAS. ", " .COLUMN_RESERVA_MOTIVO. ", ".COLUMN_RESERVA_AULARESERVADA. ")
+            $sql = "INSERT INTO " .TABLE_RESERVA. " (" .COLUMN_RESERVA_ID. ", ".COLUMN_RESERVA_HORA. ", ".COLUMN_RESERVA_HORASRESERVADAS. ", " .COLUMN_RESERVA_MOTIVO. ", ".COLUMN_RESERVA_AULARESERVADA. ")
             VALUES (NULL, :dia, :diasReservados, :motivo, :idAulaReservada)";
             $statement = $this->conn->prepare($sql);
             $statement->bindParam(':idReserva', $idReserva);
@@ -177,6 +173,21 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
             $statement->bindParam(':horasReservadas', $horasReservadas);
             $statement->bindParam(':motivo', $motivo);
             $statement->bindParam(':idAulaReservada', $idAulaReservada);
+            $statement->execute();
+            return $statement;
+        }
+
+        // REGISTRO DE USUARIO
+
+        function altaUsuario ($user, $nombre, $passw, $email, $fechanac) {
+            $sql = "INSERT INTO " .USER_TABLE. " (" .COLUMN_USER_USERNAME. ", " .COLUMN_USER_NAME. ", " .USERPASSW_COLUMN. ", "
+                .COLUMN_USER_EMAIL. ", " .COLUMN_USER_FECHANAC. ") VALUES (:user, :nombre, PASSWORD( :passw ), :email, :fechanac)";
+            $statement = $this->conn->prepare($sql);
+            $statement->bindParam(':user', $user);
+            $statement->bindParam(':nombre', $nombre);
+            $statement->bindParam(':passw', $passw);
+            $statement->bindParam(':email', $email);
+            $statement->bindParam(':fechanac', $fechanac);
             $statement->execute();
             return $statement;
         }
