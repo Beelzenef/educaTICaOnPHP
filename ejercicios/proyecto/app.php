@@ -159,7 +159,10 @@
                         echo "<td> " .$item['nombre']. "</td>";
                         echo "<td> " .$item['codigo']. "</td>";
                         echo "<td> " .$item['ubicacion']. "</td>";
-                        echo "<td> " .$item['tic']. "</td>";
+                        if ($item['tic'] == 1)
+                            echo "<td> Sí </td>";
+                        else
+                            echo "<td> No </td>";
                         echo "<td> <a href=\"altaReserva.php?idAula=" .$item['id']. "\"> <img src=\"https://flow.microsoft.com/Content/retail/assets/button.619efbb4f46aceff2c9b7df7c0630a57.2.svg\"/> </a>";
                         echo "<td> <a href=\"delete_aula.php?idAula=" .$item['id']. "\"> <img src=\"https://static.independent.co.uk/static-assets/close-video-preroll.svg\"/> </a> </tr>";                            
                     }
@@ -205,20 +208,20 @@
                     <h1 class=\"text-center\"> Listado de reservas </h1>
                     <table class=\"table table-bordered table-striped\">";
 
-                    echo "<thead class=\"thead-default\"> <tr> <th> ID </th> <th> ID </th> <th> Aula </th> <th> Reservado en: </th>
-                    <th> Cantidad </th> <th> Motivo </th> <th> Eliminar aula </th></tr> </thead>";
+                    echo "<thead class=\"thead-default\"> <tr> <th> ID </th> <th> Aula </th> <th> Reservado en: </th>
+                    <th> Cantidad </th> <th> Motivo </th> <th> Eliminar reserva </th></tr> </thead>";
 
                     foreach ($aulas as $item) {
                         echo "<tr> <td> " .$item['idReserva']. "</td>";
                         echo "<td> " .$item['idAulaReservada']. "</td>";
 
-                        if (!is_null($item['hora']) {
-                            echo "<td> " .$item['hora']. "</td>";
-                            echo "<td> " .$item['horasReservadas']. "</td>";
-                        }
-                        if (!is_null($item['hora']) {
+                        if (is_null($item['hora'])) {
                             echo "<td> " .$item['dia']. "</td>";
-                            echo "<td> " .$item['diasReservados']. "</td>";
+                            echo "<td> " .$item['diasreservados']. "</td>";
+                        }
+                        if (is_null($item['dia'])) {
+                            echo "<td> " .$item['hora']. "</td>";
+                            echo "<td> " .$item['horasreservadas']. "</td>";
                         }
                         echo "<td> " .$item['motivo']. "</td>";
                         echo "<td> <a href=\"delete_reserva.php?idReserva=" .$item['idReserva']. "\"> <img src=\"https://static.independent.co.uk/static-assets/close-video-preroll.svg\"/> </a> </tr>";                            

@@ -7,9 +7,9 @@
     $app = new App();
     $app->validateSession();
 
-    // Alta reserva por horas
-    $idAula = $_GET['idAula'];
-    
+    // Alta reserva por días
+    if ($_SERVER['REQUEST_METHOD'] == 'GET')
+      $idAula = $_GET['idAula'];
 ?>
 
     <div class="modal-dialog" role="document">
@@ -19,10 +19,17 @@
       </div>
       <form method="POST" action="<?=$_SERVER['PHP_SELF'] ?>">
     <div class="form-group">
+      <?php
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+          echo "
+          <input type=\"hidden\" name=\"idAula\"
+          class=\"form-control\" id=\"idAula\" aria-describedby=\"idAula\" value=\"" .$idAula. "\"\>";
+        }
+      ?>
       <label for="dia">Día para reservar</label>
       <input type="date" name="dia" required="required" class="form-control" id="dia" aria-describedby="dia">
       <label for="diasreservados">Horas a reservar</label>
-      <input type="number" name="diasreservados" required="required" class="form-control" min="1" max="4" id="diasreservados" aria-describedby="diasreservados" placeholder="1">
+      <input type="number" name="diasreservados" required="required" class="form-control" min="1" max="4" id="diasreservados" aria-describedby="diasreservados" value="1">
       <label for="motivo">Motivo de la reserva</label>
       <input type="text" name="motivo" required="required" class="form-control" id="motivo" aria-describedby="motivo">
     </div>
@@ -32,15 +39,15 @@
 
 <?php
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST')
-    {
-        $motivo =$_POST['motivo'];
-        $dia = $_POST['dia'];
-        $diasreservados = $_POST['diasreservados'];
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $idAula = $_POST['idAula'];
+    $motivo =$_POST['motivo'];
+    $dia = $_POST['dia'];
+    $diasreservados = $_POST['diasreservados'];
 
-        $app->altaReservaPorDia($dia, $diasreservados, $idAula, $motivo);
-
-    }
+    $app->altaReservaPorDia($dia, $diasreservados, $idAula, $motivo);
+    //echo "<script language=\"javascript\">window.location.href=\"reservas.php\"</script>";
+  }
     App::showHTMLFooter();
     
 ?>

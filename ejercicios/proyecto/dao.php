@@ -63,13 +63,17 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
 
         function validateUser($u, $p) {
             try {
-            $sql = "SELECT name, password FROM " .USER_TABLE. " WHERE " .COLUMN_USER_USERNAME. "='" .$u. "' AND " .USERPASSW_COLUMN. "=PASSWORD('" .$p. "');";
+            $sql = "SELECT ".COLUMN_USER_USERNAME. ", " .USERPASSW_COLUMN. " FROM " .USER_TABLE. " WHERE " .COLUMN_USER_USERNAME. "='" .$u. "' AND " .USERPASSW_COLUMN. "=PASSWORD('" .$p. "');";
+            echo $sql;
             $statement = $this->conn->query($sql);
-            if($statement->rowCount()==1)
-            {
+
+            $resultado = $statement->fetchAll();
+
+            if (count($resultado) > 0) {
                 return true;
             }
             return false;
+
             } catch (PDOException $e) {
                 $this->err = "Error con usuario: " .$e->getMessage();
             }
@@ -159,26 +163,52 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
         }
 
         function altaReserva($hora, $horasReservadas, $dia, $diasReservados, $idAulaReservada, $motivo) {
-            $sql = "INSERT INTO " .TABLE_RESERVA. " (" .COLUMN_RESERVA_ID. ", ".COLUMN_RESERVA_HORA. ", ".COLUMN_RESERVA_HORASRESERVADAS. 
-            ", ".COLUMN_RESERVA_DIA. ", ".COLUMN_RESERVA_DIASRESERVADOS. ", ".COLUMN_RESERVA_MOTIVO. ", ".COLUMN_RESERVA_AULARESERVADA. ")
-            VALUES (NULL, :hora, :horasReservadas:, :dia, :diasReservados, :idAulaReservada)";
+            $sql = "INSERT INTO " .TABLE_RESERVA. " (" .COLUMN_RESERVA_ID. ", " .COLUMN_RESERVA_AULARESERVADA. 
+            ", " .COLUMN_RESERVA_HORA. ", " .COLUMN_RESERVA_HORASRESERVADAS. 
+            ", ".COLUMN_RESERVA_DIA. ", ".COLUMN_RESERVA_DIASRESERVADOS. ", ".COLUMN_RESERVA_MOTIVO.")
+            VALUES (NULL, :idAulaReservada, :hora, :horasreservadas:, :dia, :diasReservados, :motivo)";
             $statement = $this->conn->prepare($sql);
-            $statement->bindParam(':hora', $hora);
-            $statement->bindParam(':horasReservadas', $horasReservadas);
-            $statement->bindParam(':dia', $dia);
-            $statement->bindParam(':diasReservados', $diasReservados);
             $statement->bindParam(':idAulaReservada', $idAulaReservada);
-            $statement->bindParam(":motivo", $motivo)
+            $statement->bindParam(':hora', $hora);
+            $statement->bindParam(':horasreservadas', $horasReservadas);
+            $statement->bindParam(':dia', $dia);
+            $statement->bindParam(':diasreservados', $diasReservados);
+            $statement->bindParam(':motivo', $motivo);
             $statement->execute();
+            echo $sql;
             return $statement;
         }
 
         function altaReservaPorDia($dia, $diasReservados, $idAulaReservada, $motivo) {
-            altaReserva(NULL, NULL, $dia, $diasReservados, $idAulaReservada, $motivo);
+            $sql = "INSERT INTO " .TABLE_RESERVA. " (" .COLUMN_RESERVA_ID. ", " .COLUMN_RESERVA_AULARESERVADA. 
+            ", " .COLUMN_RESERVA_HORA. ", " .COLUMN_RESERVA_HORASRESERVADAS. 
+            ", ".COLUMN_RESERVA_DIA. ", ".COLUMN_RESERVA_DIASRESERVADOS. ", ".COLUMN_RESERVA_MOTIVO.")
+            VALUES (NULL, :idAulaReservada, NULL, NULL, :dia, :diasReservados, :motivo)";
+            $statement = $this->conn->prepare($sql);
+
+            $statement->bindParam(':idAulaReservada', $idAulaReservada);
+            $statement->bindParam(':dia', $dia);
+            $statement->bindParam(':diasReservados', $diasReservados);
+            $statement->bindParam(':motivo', $motivo);
+
+            $statement->execute();
+            echo $sql;
+            return $statement;
         }
 
         function altaReservaPorHoras($hora, $horasReservadas, $idAulaReservada, $motivo) {
-            altaReserva($hora, $horasReservadas, NULL, NULL, $idAulaReservada, $motivo);
+            $sql = "INSERT INTO " .TABLE_RESERVA. " (" .COLUMN_RESERVA_ID. ", " .COLUMN_RESERVA_AULARESERVADA. 
+            ", " .COLUMN_RESERVA_HORA. ", " .COLUMN_RESERVA_HORASRESERVADAS. 
+            ", ".COLUMN_RESERVA_DIA. ", ".COLUMN_RESERVA_DIASRESERVADOS. ", ".COLUMN_RESERVA_MOTIVO.")
+            VALUES (NULL, :idAulaReservada, :hora, :horasreservadas, NULL, NULL, :motivo)";
+            $statement = $this->conn->prepare($sql);
+            $statement->bindParam(':idAulaReservada', $idAulaReservada);
+            $statement->bindParam(':hora', $hora);
+            $statement->bindParam(':horasreservadas', $horasReservadas);
+            $statement->bindParam(':motivo', $motivo);
+            $statement->execute();
+            echo $sql;
+            return $statement;
         }
 
         // REGISTRO DE USUARIO
