@@ -98,6 +98,13 @@
         static function showHTMLFooter() {
             print "
             </body>
+                <footer class=\"page-footer blue center-on-small-only\">
+                    <div class=\"footer-copyright\">
+                        <div class=\"container-fluid\">
+                            © 2018 Copyright: <a href=\"https://about.me/Beelzenef\"> Elena Guzmán Blanco </a>
+                        </div>
+                    </div>
+                </footer>
             </html>";
         }
 
