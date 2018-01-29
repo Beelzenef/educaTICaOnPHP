@@ -99,9 +99,10 @@
             print "
             </body>
                 <footer class=\"page-footer blue center-on-small-only\">
+                    <br/><br/><br/>
                     <div class=\"footer-copyright\">
                         <div class=\"container-fluid\">
-                            © 2018 Copyright: <a href=\"https://about.me/Beelzenef\"> Elena Guzmán Blanco </a>
+                            © 2018 Coded with ☕ by <a href=\"https://about.me/Beelzenef\"> Elena Guzmán Blanco </a>
                         </div>
                     </div>
                 </footer>
@@ -159,7 +160,7 @@
                     <h1 class=\"text-center\"> Listado de aulas </h1>
                     <table class=\"table table-bordered table-striped\">";
 
-                    echo "<thead class=\"thead-default\"> <tr> <th> ID </th> <th> Nombre </th> <th> Codigo </th> <th> Ubicacion </th> <th> TIC </th> <th> Reservar </th> <th> Eliminar aula </th></tr> </thead>";
+                    echo "<thead class=\"thead-default\"> <tr> <th> ID </th> <th> Nombre </th> <th> Codigo </th> <th> Ubicacion </th> <th> TIC </th> <th> Reservar </th> <th> Eliminar aula </th> <th>Buscar reservas</th> </tr> </thead>";
 
                     foreach ($aulas as $item) {
                         echo "<tr> <td> " .$item['id']. "</td>";
@@ -170,8 +171,9 @@
                             echo "<td> Sí </td>";
                         else
                             echo "<td> No </td>";
-                        echo "<td> <a href=\"altaReserva.php?idAula=" .$item['id']. "\"> <img src=\"https://flow.microsoft.com/Content/retail/assets/button.619efbb4f46aceff2c9b7df7c0630a57.2.svg\"/> </a>";
-                        echo "<td> <a href=\"delete_aula.php?idAula=" .$item['id']. "\"> <img src=\"https://static.independent.co.uk/static-assets/close-video-preroll.svg\"/> </a> </tr>";                            
+                        echo "<td> <a href=\"altaReserva.php?idAula=" .$item['id']. "\"> <img src=\"https://flow.microsoft.com/Content/retail/assets/button.619efbb4f46aceff2c9b7df7c0630a57.2.svg\"/></a> ";
+                        echo "<td> <a href=\"delete_aula.php?idAula=" .$item['id']. "\"> <img src=\"https://static.independent.co.uk/static-assets/close-video-preroll.svg\"/> </a> </td>";
+                        echo "<td> <a href=\"ver_reservas.php?idAula=" .$item['id']. "\"> <img src=\"https://www.barganero.com/images/botonLupaBuscador.png\"/> </a> </td> </tr>";                                                       ;                             
                     }
 
                     echo "</table>";
@@ -216,7 +218,7 @@
                     <table class=\"table table-bordered table-striped\">";
 
                     echo "<thead class=\"thead-default\"> <tr> <th> ID </th> <th> Aula </th> <th> Reservado en: </th>
-                    <th> Cantidad </th> <th> Motivo </th> <th> Eliminar reserva </th></tr> </thead>";
+                    <th> Cantidad </th> <th> Motivo </th> <th> Eliminar reserva </th> </tr> </thead>";
 
                     foreach ($aulas as $item) {
                         echo "<tr> <td> " .$item['idReserva']. "</td>";
@@ -231,7 +233,7 @@
                             echo "<td> " .$item['horasreservadas']. "</td>";
                         }
                         echo "<td> " .$item['motivo']. "</td>";
-                        echo "<td> <a href=\"delete_reserva.php?idReserva=" .$item['idReserva']. "\"> <img src=\"https://static.independent.co.uk/static-assets/close-video-preroll.svg\"/> </a> </tr>";                            
+                        echo "<td> <a href=\"delete_reserva.php?idReserva=" .$item['idReserva']. "\"> <img src=\"https://static.independent.co.uk/static-assets/close-video-preroll.svg\"/> </a> </td></tr>";                        
                     }
                     echo "</table>";
                 }
@@ -240,6 +242,47 @@
             {
                 echo "<p>Error en la consulta</p>";
             }
+        }
+
+        function getReservaFromAula($idAula)
+        {
+            try {
+                
+            $aulas = $this->dao->getReservaFromAula($idAula);
+                
+                                if (count($aulas) > 0) {
+                                    echo "
+                                    <h1 class=\"text-center\"> Listado de reservas </h1>
+                                    <table class=\"table table-bordered table-striped\">";
+                
+                                    echo "<thead class=\"thead-default\"> <tr> <th> ID </th> <th> Aula </th> <th> Reservado en: </th>
+                                    <th> Cantidad </th> <th> Motivo </th> <th> Eliminar reserva </th> </tr> </thead>";
+                
+                                    foreach ($aulas as $item) {
+                                        echo "<tr> <td> " .$item['idReserva']. "</td>";
+                                        echo "<td> " .$item['idAulaReservada']. "</td>";
+                
+                                        if (is_null($item['hora'])) {
+                                            echo "<td> " .$item['dia']. "</td>";
+                                            echo "<td> " .$item['diasreservados']. "</td>";
+                                        }
+                                        if (is_null($item['dia'])) {
+                                            echo "<td> " .$item['hora']. "</td>";
+                                            echo "<td> " .$item['horasreservadas']. "</td>";
+                                        }
+                                        echo "<td> " .$item['motivo']. "</td>";
+                                        echo "<td> <a href=\"delete_reserva.php?idReserva=" .$item['idReserva']. "\"> <img src=\"https://static.independent.co.uk/static-assets/close-video-preroll.svg\"/> </a> </td></tr>";                        
+                                    }
+                                    echo "</table>";
+                                }
+                                else {
+                                    echo "<h4>No hay reservas para esta aula</h4>";
+                                }
+                            }
+                            catch (Exception $e)
+                            {
+                                echo "<p>Error en la consulta</p>";
+                            }
         }
 
         function altaReservaPorHoras($hora, $horasReservadas, $idAulaReservada, $motivo) {
@@ -264,7 +307,7 @@
 
         function deleteReserva($idReserva) {
             try {
-                $aulas = $this->dao->deleteReserva($id);
+                $reserva = $this->dao->deleteReserva($idReserva);
                 echo "<p>¡Reserva eliminada!</p>";
             }
             catch (Exception $e)
@@ -311,11 +354,35 @@
                   <h5 class=\"modal-title\">Eliminar " .$tipoItem. "</h5>
                 </div>
                 <div class=\"modal-body\">
-                  <p>El botón de confirmar eliminará el/la " .$tipoItem. " de la base de datos.
+                  <p>El botón de confirmar eliminará el " .$tipoItem. " de la base de datos.
                   Obviamente esta acción no puede deshacerse.</p>
                 </div>
                 <div class=\"modal-footer\">
                   <a class=\"nav-link\" href=\"delete_confirm.php?id=" .$id. "\">
+                    <button type=\"button\" class=\"btn btn-primary\">Eliminar</button>
+                  </a>
+                  <a class=\"nav-link\" href=\"aulas.php\"/>
+                    <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Cancelar</button>
+                  </a>
+                </div>
+              </div>
+            </div>";
+        }
+
+        static function confirmationDialogReserva($tipoItem, $id) {
+            
+            echo "
+            <div class=\"modal-dialog\" role=\"document\">
+              <div class=\"modal-content\">
+                <div class=\"modal-header\">
+                  <h5 class=\"modal-title\">Eliminar " .$tipoItem. "</h5>
+                </div>
+                <div class=\"modal-body\">
+                  <p>El botón de confirmar eliminará la " .$tipoItem. " de la base de datos.
+                  Obviamente esta acción no puede deshacerse.</p>
+                </div>
+                <div class=\"modal-footer\">
+                  <a class=\"nav-link\" href=\"delete_confirm_r.php?id=" .$id. "\">
                     <button type=\"button\" class=\"btn btn-primary\">Eliminar</button>
                   </a>
                   <a class=\"nav-link\" href=\"aulas.php\"/>

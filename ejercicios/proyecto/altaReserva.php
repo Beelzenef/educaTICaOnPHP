@@ -51,8 +51,7 @@
         $horasReservadas = $_POST['horasreservadas'];
 
         $app->altaReservaPorHoras($hora, $horasReservadas, $idAula, $motivo);
-        //echo "<script language=\"javascript\">window.location.href=\"reservas.php\"</script>";
-         //echo "<script language=\"javascript\">window.location.href=\"reservas.php\"</script>";
+        echo "<script language=\"javascript\">window.location.href=\"reservas.php\"</script>";
 
     }
     App::showHTMLFooter();

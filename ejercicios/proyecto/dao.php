@@ -227,10 +227,10 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
         }
 
         function deleteReserva($idReserva) {
-            $sql = "DELETE FROM " .TABLE_RESERVA. " WHERE id = :id";
+            $sql = "DELETE FROM " .TABLE_RESERVA. " WHERE idReserva = :idReserva";
            
            $statement = $this->conn->prepare($sql);
-           $statement->bindParam(':id', $idReserva);
+           $statement->bindParam(':idReserva', $idReserva);
            $statement->execute();
            echo "<script language=\"javascript\">window.location.href=\"aulas.php\"</script>";
            

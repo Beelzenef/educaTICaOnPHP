@@ -13,7 +13,7 @@
         echo '<p>Sin reserva elegida</p>';
     }
     else {
-        App::confirmationDialog("reserva", $idReserva);
+        App::confirmationDialogReserva("reserva", $idReserva);
     }
 
     App::showHTMLFooter();

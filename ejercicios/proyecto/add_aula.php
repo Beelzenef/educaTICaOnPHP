@@ -55,8 +55,6 @@
         echo "<script language=\"javascript\">window.location.href=\"aulas.php\"</script>";
 
     }
-
-
     App::showHTMLFooter();
     
 ?>
