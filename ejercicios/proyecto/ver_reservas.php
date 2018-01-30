@@ -14,7 +14,7 @@
         }
         else {
             $app->getReservaFromAula($idAula);
-        }
+    }
 
     App::showHTMLFooter();
     

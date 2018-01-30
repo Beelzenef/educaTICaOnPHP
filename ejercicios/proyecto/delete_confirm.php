@@ -4,6 +4,8 @@
 
     $app = new App();
     $app->validateSession();
+    App::showHTMLHeader("Eliminando aula - EDUCA-TIC-A");
+    App::showMenu();
 
     $idAula = $_GET['id'];
     

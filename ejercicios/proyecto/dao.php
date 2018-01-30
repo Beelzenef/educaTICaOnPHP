@@ -97,8 +97,9 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
                 $sql = "SELECT * FROM " .TABLE_AULA;
                 if ($resultado = $this->conn->query($sql)) 
                 {
-                    if ($resultado->fetchColumn() > 0) {
-                        return $resultado;
+                    $filas = $resultado->fetchAll();
+                    if (count($filas) > 0) {
+                        return $filas;
                     }
                     else
                     {
@@ -139,8 +140,9 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
             $sql = "SELECT * FROM " .TABLE_RESERVA;
             if ($resultado = $this->conn->query($sql)) 
             {
-                if ($resultado->fetchColumn() > 0) {
-                    return $resultado;
+                $filas = $resultado->fetchAll();
+                if (count($filas) > 0) {
+                    return $filas;
                 }
                 else
                 {
@@ -155,11 +157,42 @@ define ("COLUMN_RESERVA_MOTIVO", "motivo");
 
         function getReservaFromAula($idAula) {
             $sql = "SELECT * FROM " .TABLE_RESERVA. 
-                " WHERE " .COLUMN_RESERVA_AULARESERVADA. " = :idAulaReservada";
-            $statement = $this->conn->prepare($sql);
-            $statement->bindParam(':idAulaReservada', $idAula);
-            $statement->execute();
-            return $statement;
+                " WHERE " .COLUMN_RESERVA_AULARESERVADA. " = " .$idAula;
+                if ($resultado = $this->conn->query($sql)) 
+                {
+                    $filas = $resultado->fetchAll();
+                    if (count($filas) > 0) {
+                        return $filas;
+                    }
+                    else
+                    {
+                        echo "<h3 class=\"text-center\">Sin datos que mostrar</h3>";
+                    }
+                }
+                else
+                {
+                    echo "<h3 class=\"text-center\">Error en la consulta</h3>";
+                }
+        }
+
+        function getReservaConMotivo($motivo) {
+            $sql = "SELECT * FROM " .TABLE_RESERVA. 
+            " WHERE " .COLUMN_RESERVA_MOTIVO. " RLIKE '" .$motivo. "'";
+            if ($resultado = $this->conn->query($sql)) 
+            {
+                $filas = $resultado->fetchAll();
+                if (count($filas) > 0) {
+                    return $filas;
+                }
+                else
+                {
+                    echo "<h3 class=\"text-center\">Sin datos que mostrar</h3>";
+                }
+            }
+            else
+            {
+                echo "<h3 class=\"text-center\">Error en la consulta</h3>";
+            }
         }
 
         function altaReserva($hora, $horasReservadas, $dia, $diasReservados, $idAulaReservada, $motivo) {

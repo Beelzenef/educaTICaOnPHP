@@ -66,7 +66,6 @@
                         <link href=\"css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">
                 </head>
                 <body>
-                <p>Con Bootstrap</p>
                 <script src=\"http://code.jquery.com/jquery.js\"></script>
                 <script src=\"js/bootstrap.min.js\"></script>
                 ";
@@ -86,6 +85,9 @@
                     <a class=\"nav-link\" href=\"reservas.php\"/>Reservas</a>
                 </li>
                 <li class=\"nav-item active\">
+                    <a class=\"nav-link\" href=\"buscar_reservas.php\"/>Buscar reservas</a>
+                </li>
+                <li class=\"nav-item active\">
                     <a class=\"nav-link\" href=\"logout.php\"/>Cerrar sesión</a>
                 </li>
               </ul>
@@ -101,7 +103,7 @@
                 <footer class=\"page-footer blue center-on-small-only\">
                     <br/><br/><br/>
                     <div class=\"footer-copyright\">
-                        <div class=\"container-fluid\">
+                        <div class=\"container-fluid text-center\">
                             © 2018 Coded with ☕ by <a href=\"https://about.me/Beelzenef\"> Elena Guzmán Blanco </a>
                         </div>
                     </div>
@@ -159,9 +161,8 @@
                     echo "
                     <h1 class=\"text-center\"> Listado de aulas </h1>
                     <table class=\"table table-bordered table-striped\">";
-
                     echo "<thead class=\"thead-default\"> <tr> <th> ID </th> <th> Nombre </th> <th> Codigo </th> <th> Ubicacion </th> <th> TIC </th> <th> Reservar </th> <th> Eliminar aula </th> <th>Buscar reservas</th> </tr> </thead>";
-
+                    
                     foreach ($aulas as $item) {
                         echo "<tr> <td> " .$item['id']. "</td>";
                         echo "<td> " .$item['nombre']. "</td>";
@@ -173,11 +174,12 @@
                             echo "<td> No </td>";
                         echo "<td> <a href=\"altaReserva.php?idAula=" .$item['id']. "\"> <img src=\"https://flow.microsoft.com/Content/retail/assets/button.619efbb4f46aceff2c9b7df7c0630a57.2.svg\"/></a> ";
                         echo "<td> <a href=\"delete_aula.php?idAula=" .$item['id']. "\"> <img src=\"https://static.independent.co.uk/static-assets/close-video-preroll.svg\"/> </a> </td>";
-                        echo "<td> <a href=\"ver_reservas.php?idAula=" .$item['id']. "\"> <img src=\"https://www.barganero.com/images/botonLupaBuscador.png\"/> </a> </td> </tr>";                                                       ;                             
+                        echo "<td> <a href=\"ver_reservas.php?idAula=" .$item['id']. "\"> <img src=\"https://www.barganero.com/images/botonLupaBuscador.png\"/> </a> </td> </tr>";                            
                     }
 
                     echo "</table>";
-                    echo "<a href=\"add_aula.php\" class=\"btn btn-primary btn-lg\" role=\"button\">Añadir nueva aula</a>";                    }
+                    echo "<a href=\"add_aula.php\" class=\"btn btn-primary btn-lg\" role=\"button\">Añadir nueva aula</a>";  
+                }
             }
             catch (Exception $e)
             {
@@ -209,33 +211,10 @@
 
         function getReservas() {
             try {
+                $reservas = $this->dao->getReservas();
 
-                $aulas = $this->dao->getReservas();
-
-                if (count($aulas) > 0) {
-                    echo "
-                    <h1 class=\"text-center\"> Listado de reservas </h1>
-                    <table class=\"table table-bordered table-striped\">";
-
-                    echo "<thead class=\"thead-default\"> <tr> <th> ID </th> <th> Aula </th> <th> Reservado en: </th>
-                    <th> Cantidad </th> <th> Motivo </th> <th> Eliminar reserva </th> </tr> </thead>";
-
-                    foreach ($aulas as $item) {
-                        echo "<tr> <td> " .$item['idReserva']. "</td>";
-                        echo "<td> " .$item['idAulaReservada']. "</td>";
-
-                        if (is_null($item['hora'])) {
-                            echo "<td> " .$item['dia']. "</td>";
-                            echo "<td> " .$item['diasreservados']. "</td>";
-                        }
-                        if (is_null($item['dia'])) {
-                            echo "<td> " .$item['hora']. "</td>";
-                            echo "<td> " .$item['horasreservadas']. "</td>";
-                        }
-                        echo "<td> " .$item['motivo']. "</td>";
-                        echo "<td> <a href=\"delete_reserva.php?idReserva=" .$item['idReserva']. "\"> <img src=\"https://static.independent.co.uk/static-assets/close-video-preroll.svg\"/> </a> </td></tr>";                        
-                    }
-                    echo "</table>";
+                if (count($reservas) > 0) {
+                    $this->listarReservas($reservas);
                 }
             }
             catch (Exception $e)
@@ -246,43 +225,48 @@
 
         function getReservaFromAula($idAula)
         {
-            try {
+            try {  
+            $reservas = $this->dao->getReservaFromAula($idAula);
                 
-            $aulas = $this->dao->getReservaFromAula($idAula);
+                if (count($reservas) > 0) {
+                    $this->listarReservas($reservas);       
+                }
+                else {
+                    echo "<h4>No hay reservas para esta aula</h4>";
+                }
+            } catch (Exception $e) {
+                echo "<p>Error en la consulta</p>";
+            }
+        }
+
+        function getReservaConMotivo($motivo) {
+            try {      
+                $reservas = $this->dao->getReservaConMotivo($motivo);
                 
-                                if (count($aulas) > 0) {
-                                    echo "
-                                    <h1 class=\"text-center\"> Listado de reservas </h1>
-                                    <table class=\"table table-bordered table-striped\">";
+                if (count($reservas) > 0) {
+                    $this->listarReservas($reservas);       
+                }
+                else {
+                    echo "<h4>No hay reservas para estos parámetros</h4>";
+                }
+            } catch (Exception $e) {
+                echo "<p>Error en la consulta</p>";
+            }
+        }
+
+        function getReservaPorCodigo($codigoaula) {
+            try {      
+                $reservas = $this->dao->getReservaConMotivo($codigoaula);
                 
-                                    echo "<thead class=\"thead-default\"> <tr> <th> ID </th> <th> Aula </th> <th> Reservado en: </th>
-                                    <th> Cantidad </th> <th> Motivo </th> <th> Eliminar reserva </th> </tr> </thead>";
-                
-                                    foreach ($aulas as $item) {
-                                        echo "<tr> <td> " .$item['idReserva']. "</td>";
-                                        echo "<td> " .$item['idAulaReservada']. "</td>";
-                
-                                        if (is_null($item['hora'])) {
-                                            echo "<td> " .$item['dia']. "</td>";
-                                            echo "<td> " .$item['diasreservados']. "</td>";
-                                        }
-                                        if (is_null($item['dia'])) {
-                                            echo "<td> " .$item['hora']. "</td>";
-                                            echo "<td> " .$item['horasreservadas']. "</td>";
-                                        }
-                                        echo "<td> " .$item['motivo']. "</td>";
-                                        echo "<td> <a href=\"delete_reserva.php?idReserva=" .$item['idReserva']. "\"> <img src=\"https://static.independent.co.uk/static-assets/close-video-preroll.svg\"/> </a> </td></tr>";                        
-                                    }
-                                    echo "</table>";
-                                }
-                                else {
-                                    echo "<h4>No hay reservas para esta aula</h4>";
-                                }
-                            }
-                            catch (Exception $e)
-                            {
-                                echo "<p>Error en la consulta</p>";
-                            }
+                if (count($reservas) > 0) {
+                    $this->listarReservas($reservas);       
+                }
+                else {
+                    echo "<h4>No hay reservas para estos parámetros</h4>";
+                }
+            } catch (Exception $e) {
+                echo "<p>Error en la consulta</p>";
+            }
         }
 
         function altaReservaPorHoras($hora, $horasReservadas, $idAulaReservada, $motivo) {
@@ -314,6 +298,34 @@
             {
                 echo "<p>No ha sido posible eliminar...</p>";
             }
+        }
+
+        // LISTAR RESERVAS (EXTRACCION)
+
+        function listarReservas ($lista) {
+            echo "
+            <h1 class=\"text-center\"> Listado de reservas </h1>
+            <table class=\"table table-bordered table-striped\">";
+
+            echo "<thead class=\"thead-default\"> <tr> <th> ID </th> <th> Aula </th> <th> Reservado en: </th>
+            <th> Cantidad </th> <th> Motivo </th> <th> Eliminar reserva </th> </tr> </thead>";
+
+            foreach ($lista as $item) {
+                echo "<tr> <td> " .$item['idReserva']. "</td>";
+                echo "<td> " .$item['idAulaReservada']. "</td>";
+
+                if (is_null($item['hora'])) {
+                    echo "<td> " .$item['dia']. "</td>";
+                    echo "<td> " .$item['diasreservados']. "</td>";
+                }
+                if (is_null($item['dia'])) {
+                    echo "<td> " .$item['hora']. "</td>";
+                    echo "<td> " .$item['horasreservadas']. "</td>";
+                }
+                echo "<td> " .$item['motivo']. "</td>";
+                echo "<td> <a href=\"delete_reserva.php?idReserva=" .$item['idReserva']. "\"> <img src=\"https://static.independent.co.uk/static-assets/close-video-preroll.svg\"/> </a> </td></tr>";                        
+            }
+            echo "</table>";
         }
 
         // CONSULTAS PARA USUARIOS

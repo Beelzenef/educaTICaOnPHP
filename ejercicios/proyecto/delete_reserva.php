@@ -2,7 +2,7 @@
 
     include_once "app.php";
 
-    App::showHTMLHeader("Eliminando reserva");
+    App::showHTMLHeader("Eliminando reserva - EDUCA-TIC-A");
     App::showMenu();
     $app = new App();
     $app->validateSession();
